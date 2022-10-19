@@ -24,7 +24,17 @@ class MainController extends AbstractController
     #[Route('/contact', name: 'contact')]
     public function contact(): Response
     {
-        return $this->render('main/contact.html.twig');
+        $tel = '0123456789';
+        $email = 'contact@series.com';
+
+        return $this->render('main/contact.html.twig', compact('tel', 'email'));
+        /*
+        compact('tel', 'email') permet de passer les variables à la vue, revient à (les noms passés doivent être identiques à ceux des variables :
+        return $this->render('main/contact.html.twig', [
+            'tel' => $tel,
+            'email' => $email,
+        ]);
+        */
     }
 
 }

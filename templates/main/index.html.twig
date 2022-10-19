@@ -61,8 +61,10 @@
     {% endfor %}
     </ul>
 
-
     <p>Aujourd'hui : {{ 'now'|date('d/m/Y') }}</p>
+
+    {%  set message = '<h1>Hello je suis du code html</h1>' %}
+    {{ message|raw }}
 
     This friendly message is coming from:
     <ul>
