@@ -4,4 +4,13 @@
 
 {% block body %}
     <h1>Liste des séries</h1>
+
+    <a href={{ path('series_new') }}>Ajouter une série</a>
+
+    <ul>
+        {% for serie in series  %}
+            <li><a href={{ path('series_detail', {'id': serie.id}) }}>{{ serie.title }}</a></li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
