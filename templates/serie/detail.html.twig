@@ -1,9 +1,23 @@
 {% extends 'layout.html.twig' %}
 
-{% block title %}Détail d'une série{% endblock %}
+{% block title %}Détail {{ serie.name }}{% endblock %}
 
 {% block body %}
-    <h1>Détail de la série n°{{ id }}</h1>
+    <h1>Détail de la série {{ serie.name }}</h1>
+    <section class="serie-details">
+        <img src="{{ asset('uploads/posters/series/' ~ serie.backdrop) }}" alt="{{ serie.name }}">
+        <div class="serie-details-infos">
+            <h1>{{ serie.name }}</h1>
+            <p>Overview: {{ serie.overview }}</p>
+            <p>Genres: {{ serie.genres }}</p>
+            <p>Popularity: {{ serie.popularity }}</p>
+            <p>Vote: {{ serie.vote }}</p>
+            <p>Status: {{ serie.status }}</p>
+            <p>Created on: {% serie.dateCreated|date('d/m/Y')  %}</p>
+            <p>First aired on: {% serie.firstAirDate|date('d/m/Y')  %}</p>
+        </div>
+
+    </section>
 {% endblock %}
 
 

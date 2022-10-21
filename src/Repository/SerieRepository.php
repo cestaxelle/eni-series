@@ -63,4 +63,26 @@ class SerieRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findAllBetweenDates(\DateTime $start, \DateTime $end): array
+    {
+        // DQL
+//        $entityManager = $this->getEntityManager();
+//        $dql = "SELECT s
+//            FROM App\Entity\Serie s
+//            WHERE s.firstAirDate > '2019-01-01'
+//            AND s.firstAirDate < '2020-01-01'
+//            ";
+//        $query = $entityManager->createQuery($dql);
+//        return $query->getResult();
+
+        // QueryBuilder
+        $qb = $this->createQueryBuilder('s');
+        $qb->andWhere("s.firstAirDate >= :start")     // autre syntaxe : $qb->andWhere($qb->expr(gte('s.firstAirDate', '2019-01-01'))
+            ->andWhere("s.firstAirDate <= :end")
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
+        return $qb->getQuery()->getResult();
+    }
+
 }

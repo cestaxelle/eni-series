@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Serie;
+use App\Repository\SerieRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,18 +12,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class SerieController extends AbstractController
 {
     #[Route('/', name: 'series_list')]
-    public function list(): Response
+    public function list(SerieRepository $serieRepository): Response
     {
-        $series = [
-            [
-                'id' => 1,
-                'title' => 'Corporate'
-            ],
-            [
-                'id' => 2,
-                'title' => 'The IT Crowd'
-            ]
-        ];
+        // je récupère les données dans le repo
+        // premier paramètre du findBy = where, deuxième = order by
+//        $series = $serieRepository->findBy([], ['firstAirDate' => 'DESC', 'name' => 'ASC']);
+        $series = $serieRepository->findAllBetweenDates(new \DateTime('2019-01-01'), new \DateTime('2019-12-31'));
 
         return $this->render('serie/index.html.twig', [
             'series' => $series
@@ -30,13 +26,22 @@ class SerieController extends AbstractController
 
 //    je dois passer des requirements sinon à cause de /series/{id}, je ne passerai jamais dans /series/new
     #[Route('/{id}', name: 'series_detail', requirements: ['id' => '\d+'])]
-    public function detail($id): Response
+    public function detail($id, SerieRepository $serieRepository): Response
     {
-        // TODO: Récupérer la série à afficher en BDD
+        $serie = $serieRepository->find($id);
         return $this->render('serie/detail.html.twig', [
-        'id' => $id
+        'serie' => $serie
         ]);
     }
+
+//    plus rapide :
+//    #[Route('/{id}', name: 'series_detail', requirements: ['id' => '\d+'])]
+//    public function detail(Serie $serie): Response
+//    {
+//        return $this->render('serie/detail.html.twig', [
+//            'serie' => $serie
+//        ]);
+//    }
 
     #[Route('/new', name: 'series_new')]
     public function new(): Response
