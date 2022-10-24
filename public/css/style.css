@@ -72,3 +72,23 @@ nav ul {
         grid-template-columns: 300px 1fr;
     }
 }
+
+label {
+    display: block;
+}
+
+.form-row {
+    margin-bottom: 1rem;
+}
+
+.flash {
+    padding: 1rem;
+}
+
+.flash-success {
+    background-color: lightgreen;
+}
+
+.flash-error {
+    background-color: indianred;
+}

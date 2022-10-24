@@ -4,6 +4,19 @@
 
 {% block body %}
     <h1>Création d'une série</h1>
+
+    {{ form_start(serieForm) }}
+{#        <div>#}
+{#            {{ form_label(serieForm.name) }}#}
+{#        </div>#}
+{#        {{ form_widget(serieForm.name) }}#}
+{#        {{ form_errors(serieForm.name) }}#}
+{#        <br />#}
+{#        <br />#}
+        {{ form_widget(serieForm) }}
+        <button>Ajouter</button>
+    {{ form_end(serieForm) }}
+
 {% endblock %}
 
 
