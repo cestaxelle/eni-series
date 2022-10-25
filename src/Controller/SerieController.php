@@ -56,7 +56,7 @@ class SerieController extends AbstractController
         $serieForm->handleRequest($request);    // récupère ce qu'il y a dans le form et le met dans $serie
 
         // je vérifie si l'utilisateur est en train d'envoyer le formulaire ou s'il faut juste l'afficher
-        if ($serieForm->isSubmitted()) {
+        if ($serieForm->isSubmitted() && $serieForm->isValid()) {
             // s'il est en train d'envoyer le form, j'enregistre la nouvelle série en BDD
             $em->persist($serie);
             $em->flush();
