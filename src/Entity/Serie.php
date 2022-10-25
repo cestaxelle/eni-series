@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SerieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -50,6 +52,17 @@ class Serie
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $lastAirDate = null;
+
+//    dans Season, la propriété pour récup la série s'appelle $serie donc c'est ce qu'on utilise dans le mappedBy
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, orphanRemoval: true)]
+//    LES saisons liées à la série donc seasons au pluriel
+    private Collection $seasons;
+
+//    quand on a des collections dans une classe, il faut les initialiser dans le constructeur :
+    public function __construct()
+    {
+        $this->seasons = new ArrayCollection();
+    }
 
     #[ORM\Column(length: 255)]
     private ?string $backdrop = null;
@@ -226,4 +239,33 @@ class Serie
 
         return $this;
     }
+
+    public function getSeasons(): Collection
+    {
+        return $this->seasons;
+    }
+
+//    Cette fonction et la suivante peuvent être générées automatiquement
+    public function addSeason(Season $season): self
+    {
+        if (!$this->getSeasons()->contains($season)) {
+            $this->seasons->add($season);
+            $season->setSerie($this);
+        }
+        return $this;
+    }
+
+    public function removeSeason(Season $season): self
+    {
+//        si j'ai réussi à supprimer la saison
+        if ($this->getSeasons()->removeElement($season)) {
+//            et que la saison a une série qui correspond à celle sur laquelle je suis
+            if  ($season->getSerie() === $this) {
+//                j'enlève la série de la saison
+                $season->setSerie(null);
+            }
+        }
+        return $this;
+    }
+
 }

@@ -35,8 +35,9 @@ class Season
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $dateModified = null;
 
-//    plusieurs saisons peuvent être liées à une seule série, lien unidirectionnel pour commencer
-    #[ORM\ManyToOne(targetEntity: Serie::class)]
+//    plusieurs saisons peuvent être liées à une seule série, lien unidirectionnel pour commencer : #[ORM\ManyToOne(targetEntity: Serie::class)]
+//    quand on passe au bidirectionnel : dans Serie, la propriété pour récup les saisons s'appelle $seasons donc c'est ce qu'on utilise dans le inversedBy
+    #[ORM\ManyToOne(inversedBy: 'seasons', targetEntity: Serie::class)]
 //    on ne peut pas créer une saison sans y associer de série
     #[ORM\JoinColumn(nullable: false)]
     private ?Serie $serie;
