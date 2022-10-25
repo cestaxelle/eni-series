@@ -19,8 +19,9 @@ class SerieController extends AbstractController
     {
         // je récupère les données dans le repo
         // premier paramètre du findBy = where, deuxième = order by
-        $series = $serieRepository->findBy([], ['firstAirDate' => 'DESC', 'name' => 'ASC']);
+//        $series = $serieRepository->findBy([], ['firstAirDate' => 'DESC', 'name' => 'ASC']);
 //        $series = $serieRepository->findAllBetweenDates(new \DateTime('2019-01-01'), new \DateTime('2019-12-31'));
+        $series = $serieRepository->findAllWithSeasons();
 
         return $this->render('serie/index.html.twig', [
             'series' => $series

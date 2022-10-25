@@ -13,8 +13,14 @@
             <p>Popularity: {{ serie.popularity }}</p>
             <p>Vote: {{ serie.vote }}</p>
             <p>Status: {{ serie.status }}</p>
-            <p>Created on: {% serie.dateCreated|date('d/m/Y')  %}</p>
-            <p>First aired on: {% serie.firstAirDate|date('d/m/Y')  %}</p>
+            <p>Created on: {{ serie.dateCreated|date('d/m/Y')  }}</p>
+            <p>First aired on: {{ serie.firstAirDate|date('d/m/Y')  }}</p>
+            <h2>Liste des saisons :</h2>
+            {% for season in serie.seasons  %}
+                <article>
+                    {{ season.number }}
+                </article>
+            {% endfor %}
         </div>
 
     </section>

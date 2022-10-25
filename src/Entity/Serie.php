@@ -54,7 +54,7 @@ class Serie
     private ?\DateTimeInterface $lastAirDate = null;
 
 //    dans Season, la propriété pour récup la série s'appelle $serie donc c'est ce qu'on utilise dans le mappedBy
-    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'serie', targetEntity: Season::class, cascade: ['persist'], orphanRemoval: true)]
 //    LES saisons liées à la série donc seasons au pluriel
     private Collection $seasons;
 
@@ -266,6 +266,11 @@ class Serie
             }
         }
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 
 }

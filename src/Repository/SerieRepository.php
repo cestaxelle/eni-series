@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Serie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -85,4 +86,17 @@ class SerieRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAllWithSeasons()
+    {
+        $qb = $this->createQueryBuilder('serie');
+        $qb->addSelect('seasons')   // il récupère les données des séries et celles des saisons associées aux séries
+            ->leftJoin('serie.seasons', 'seasons')   // seasons est l'alias de table qui contient les saisons, il fait la jointure tout seul sur la bonne colonne
+            ->orderBy('serie.firstAirDate', 'DESC')
+            ->addOrderBy('serie.name', 'ASC');
+
+        $query = $qb->getQuery();
+        $query->setMaxResults(20); // on ne veut afficher que 20 séries
+        return new Paginator($query);
+    }
+    
 }

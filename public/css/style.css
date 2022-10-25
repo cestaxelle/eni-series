@@ -22,10 +22,6 @@ a:hover {
     color: #BC956B;
 }
 
-img {
-    max-width: 100%;
-}
-
 h1, h2, h3, h4 {
     margin-top: 0;
 }
@@ -91,4 +87,15 @@ label {
 
 .flash-error {
     background-color: indianred;
+}
+
+img {
+    width: 200px;
+    transition: transform .1s;
+    max-width: 100%;
+}
+
+img:hover{
+    -webkit-transform: scale(1.2); /* Safari 3-8 */
+    transform: scale(1.2);
 }
