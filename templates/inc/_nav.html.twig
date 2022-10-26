@@ -9,5 +9,13 @@
         <li>
             <a href="{{ path('contact') }}">Contact</a>
         </li>
+        <li>
+{#            récupère l'utilisateur connecté, renvoie null s'il n'y en a pas : #}
+            {% if app.user %}
+                <a href="{{ path('app_logout') }}">Déconnexion</a>
+            {% else %}
+                <a href="{{ path('app_login') }}">Connexion</a>
+            {% endif %}
+        </li>
     </ul>
 </nav>

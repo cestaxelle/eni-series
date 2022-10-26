@@ -22,7 +22,12 @@
     {# Commentaire twig : affichage du
     nom du controller
     invisible pour les internautes #}
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {% if app.user %}
+        <h1>Hello {{ app.user.firstName }} ! ✅</h1>
+    {% else %}
+        <h1>Hello {{ controller_name }} ! ✅</h1>
+    {% endif %}
+
     <p>Ville : {{ city|upper }}</p>
 
     {% if city == 'Rennes' %}

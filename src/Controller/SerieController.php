@@ -6,6 +6,7 @@ use App\Entity\Serie;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,7 @@ class SerieController extends AbstractController
 //        ]);
 //    }
 
+    #[IsGranted('ROLE_ADMIN')]  // pour bloquer cette route aux non-admin
     #[Route('/new', name: 'series_new')]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
@@ -58,6 +60,7 @@ class SerieController extends AbstractController
 
         // je vérifie si l'utilisateur est en train d'envoyer le formulaire ou s'il faut juste l'afficher
         if ($serieForm->isSubmitted() && $serieForm->isValid()) {
+            // $this->denyAccessUnlessGranted('ROLE_ADMIN');   // l'utilisateur verra le formulaire mais ne pourra pas le valider s'il n'est pas admin
             // s'il est en train d'envoyer le form, j'enregistre la nouvelle série en BDD
             $em->persist($serie);
             $em->flush();
