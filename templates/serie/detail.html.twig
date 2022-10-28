@@ -5,6 +5,7 @@
 {% block body %}
     <h1>Détail de la série {{ serie.name }}</h1>
     <section class="serie-details">
+        {{ idtest }}
         <img src="{{ asset('uploads/posters/series/' ~ serie.backdrop) }}" alt="{{ serie.name }}">
         <div class="serie-details-infos">
             <h1>{{ serie.name }}</h1>

@@ -5,9 +5,11 @@ namespace App\Controller;
 use App\Entity\Serie;
 use App\Form\SerieType;
 use App\Repository\SerieRepository;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,11 +33,13 @@ class SerieController extends AbstractController
 
 //    je dois passer des requirements sinon à cause de /series/{id}, je ne passerai jamais dans /series/new
     #[Route('/{id}', name: 'series_detail', requirements: ['id' => '\d+'])]
-    public function detail($id, SerieRepository $serieRepository): Response
+    public function detail($id, SerieRepository $serieRepository, Request $request): Response
     {
         $serie = $serieRepository->find($id);
+        $idtest = $request->get("id");
         return $this->render('serie/detail.html.twig', [
-        'serie' => $serie
+        'serie' => $serie,
+            'idtest' => $idtest
         ]);
     }
 
@@ -50,7 +54,7 @@ class SerieController extends AbstractController
 
     #[IsGranted('ROLE_ADMIN')]  // pour bloquer cette route aux non-admin
     #[Route('/new', name: 'series_new')]
-    public function new(Request $request, EntityManagerInterface $em): Response
+    public function new(Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
     {
         $serie = new Serie();
         $serie->setDateCreated(new \DateTime()); // ou alors utiliser les LifeCycleCallbacks de Doctrine
@@ -61,6 +65,22 @@ class SerieController extends AbstractController
         // je vérifie si l'utilisateur est en train d'envoyer le formulaire ou s'il faut juste l'afficher
         if ($serieForm->isSubmitted() && $serieForm->isValid()) {
             // $this->denyAccessUnlessGranted('ROLE_ADMIN');   // l'utilisateur verra le formulaire mais ne pourra pas le valider s'il n'est pas admin
+
+            // uploader les images
+            /** @var UploadedFile $backdropImage */                         // getData peut tout renvoyer (objet, string, nombre...), donc on type avec @var
+            $backdropImage = $serieForm->get('backdropFile')->getData();    // utiliser le name de l'input dans le formulaire
+            if ($backdropImage) {
+                $backdrop = $fileUploader->upload($backdropImage, '/backdrops');
+                $serie->setBackdrop($backdrop);
+            }
+
+            /** @var UploadedFile $posterImage */
+            $posterImage = $serieForm->get('posterFile')->getData();
+            if ($posterImage) {
+                $poster = $fileUploader->upload($posterImage, '/posters/series');
+                $serie->setPoster($poster);
+            }
+
             // s'il est en train d'envoyer le form, j'enregistre la nouvelle série en BDD
             $em->persist($serie);
             $em->flush();
